@@ -2,6 +2,7 @@
 
 import argparse
 from neopixel import NeoPixel, RED, GREEN, BLUE
+import signal
 from time import sleep, time
 
 parser = argparse.ArgumentParser(description='neopixel test')
@@ -12,8 +13,19 @@ args = parser.parse_args()
 
 neopixel = NeoPixel()
 
+outfile = None
+
 if args.output:
     outfile = open(args.output, "w")
+
+def cleanup(_signo, _stack):
+    if outfile:
+        outfile.close()
+    exit(0)
+
+
+signal.signal(signal.SIGTERM, cleanup)
+signal.signal(signal.SIGINT, cleanup)
 
 while True:
     for color in [RED, GREEN, BLUE]:
@@ -21,14 +33,9 @@ while True:
         neopixel.write([color]*args.pixels)
         output = f"{time()} {args.pixels} {color}"
         print(output)
-        if args.output:
+        if outfile:
             outfile.write(output)
             outfile.write('\n')
 
         # give the viewer some time to appreciate it
         sleep(1.0/args.frequency)
-
-# this is never reached, but works anyway in practice
-# todo handle KeyboardInterrupt for ctrl+c
-if args.output:
-    outfile.close()
