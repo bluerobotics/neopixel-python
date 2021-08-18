@@ -1,0 +1,35 @@
+{
+  "0": {
+    "llType": "error",
+    "columns": [
+      {
+        "llabel": "error message",
+        "dtype": "str"
+      }
+    ]
+  },
+  "1": {
+    "llType": "data",
+    "columns": [
+      {
+        "llabel": "pixels",
+        "dtype": "int"
+      },
+      {
+        "llabel": "red",
+        "detail": "Red LED Value",
+        "dtype": "int"
+      },
+      {
+        "llabel": "green",
+        "detail": "Green LED Value",
+        "dtype": "int"
+      },
+      {
+        "llabel": "blue",
+        "detail": "Blue LED Value",
+        "dtype": "int"
+      }
+    ]
+  }
+}
