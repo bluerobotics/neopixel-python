@@ -2,40 +2,32 @@
 
 import argparse
 from neopixel import NeoPixel, RED, GREEN, BLUE
-import signal
+import llog
+from pathlib import Path
 from time import sleep, time
 
-parser = argparse.ArgumentParser(description='neopixel test')
+
+device = "neopixel"
+defaultMeta = Path(__file__).resolve().parent / f"{device}.meta"
+
+parser = argparse.ArgumentParser(description=f'{device} test')
 parser.add_argument('--output', action='store', type=str, default=None)
+parser.add_argument('--meta', action='store', type=str, default=defaultMeta)
 parser.add_argument('--frequency', action='store', type=int, default=1)
 parser.add_argument('--pixels', action='store', type=int, default=1)
 args = parser.parse_args()
 
-neopixel = NeoPixel()
 
-outfile = None
+with llog.LLogWriter(args.meta, args.output) as log:
+    neopixel = NeoPixel()
 
-if args.output:
-    outfile = open(args.output, "w")
+    while True:
+        for color in [RED, GREEN, BLUE]:
+            # output the same color to all leds
+            neopixel.write([color]*args.pixels)
+            # extract RGB components (neopixel uses G/R/B control order)
+            g, r, b = color
+            log.log(llog.LLOG_DATA, f"{args.pixels} {r} {g} {b}")
 
-def cleanup(_signo, _stack):
-    if outfile:
-        outfile.close()
-    exit(0)
-
-
-signal.signal(signal.SIGTERM, cleanup)
-signal.signal(signal.SIGINT, cleanup)
-
-while True:
-    for color in [RED, GREEN, BLUE]:
-        # output the same color to all leds
-        neopixel.write([color]*args.pixels)
-        output = f"{time()} {args.pixels} {color}"
-        print(output)
-        if outfile:
-            outfile.write(output)
-            outfile.write('\n')
-
-        # give the viewer some time to appreciate it
-        sleep(1.0/args.frequency)
+            # give the viewer some time to appreciate it
+            sleep(1.0/args.frequency)
