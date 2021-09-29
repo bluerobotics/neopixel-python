@@ -9,6 +9,7 @@ setup(
     author='Blue Robotics',
     url='https://github.com/bluerobotics/neopixel-python',
     packages=['neopixel'],
+    package_data={ "neopixel": ["neopixel.meta"]},
     entry_points={
         'console_scripts': [
             'neopixel-test=neopixel.test:main',
