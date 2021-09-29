@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from neopixel import NeoPixel, RED, GREEN, BLUE
-from llog imoprt LLogWriter
+from llog import LLogWriter
 import time
 
 
@@ -11,7 +11,7 @@ parser.add_argument('--pixels', action='store', type=int, default=1)
 args = parser.parse_args()
 
 
-with llog.LLogWriter(args.meta, args.output) as log:
+with LLogWriter(args.meta, args.output) as log:
     neopixel = NeoPixel()
     
     if args.frequency:
