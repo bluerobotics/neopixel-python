@@ -12,14 +12,14 @@ def main():
     args = parser.parse_args()
 
 
-    with LLogWriter(args.meta, args.output) as log:
+    with LLogWriter(args.meta, args.output, console=args.console) as log:
         neopixel = NeoPixel()
 
         if args.frequency:
             delay = 1 / args.frequency
 
         start_time = time.time()
-        while time.time() - start_time < args.duration:
+        while time.time() < start_time + args.duration:
             for color in [RED, GREEN, BLUE]:
                 try:
                     # output the same color to all leds
