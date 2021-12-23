@@ -27,7 +27,7 @@ class NeoPixel(object):
             for color in grb:
                 for bit in range(8):
                     if color & (1<<bit):
-                        prepared_data.append(LED_T1)
+                        prepared_data.insert(0, LED_T1)
                     else:
-                        prepared_data.append(LED_T0)
+                        prepared_data.insert(0, LED_T0)
         self._bus.xfer(prepared_data)
